@@ -40,8 +40,7 @@ export class GameService {
   }
 
   async update(id: string, dto: UpdateGameDto): Promise<Game> {
-    await this.findById(id
-    )
+    await this.findById(id)
     const data: Partial<Game> = { ...dto };
 
     return this.prisma.games.update({
