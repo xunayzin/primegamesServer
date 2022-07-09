@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGameDto } from './dto/create-game.dto';
-import { Game } from './entities/game.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateGameDto } from './dto/create-game.dto';
+import { UpdateGameDto } from './dto/update-game.dto';
+import { Game } from './entities/game.entity';
 
 @Injectable()
 export class GameService {
-  games: Game[] = [];
-
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll(): Promise<Game[]>{
-    return this.prisma.games.findMany();
+  findAll(): Promise<Game[]> {
+    return this.prisma.table.findMany();
   }
 
   findOne(id: string): Promise<Game> {
@@ -21,5 +20,14 @@ export class GameService {
     const data: Game = { ...dto };
 
     return this.prisma.games.create({ data });
+  }
+
+  update(id: string, dto: UpdateGameDto): Promise<Game> {
+    const data: Partial<Game> = { ...dto };
+
+    return this.prisma.games.update({
+      where: { id },
+      data,
+    });
   }
 }
