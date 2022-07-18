@@ -8,24 +8,26 @@ datasource db {
 }
 
 model Games {
-  id            String @id @default(uuid())
-  title         String @unique
-  description   String @unique
-  year          Int
+  id          String @id @default(uuid())
+  title       String @unique
+  description String @unique
+  year        Int
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  genre Genre[]
   @@map("games")
 }
 
 model Genre {
-  id          String @id @default(uuid())
-  name        String @unique
+  id   String @id @default(uuid())
+  name String @unique
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  games Games[]
   @@map("genre")
 }
 
