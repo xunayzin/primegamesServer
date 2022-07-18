@@ -1,13 +1,13 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { handleError } from 'src/utils/handle-error.util';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { Genre } from './entities/genre.entity';
 
 @Injectable()
 export class GenreService {
-
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   findAll(): Promise<Genre[]> {
     return this.prisma.genre.findMany();
@@ -17,39 +17,38 @@ export class GenreService {
     const record = await this.prisma.genre.findUnique({ where: { id } });
 
     if (!record) {
-      throw new NotFoundException(`Registro com o '${id}' não encontrado.`)
+      throw new NotFoundException(`Registro com o ID '${id}' não encontrado.`);
     }
 
     return record;
   }
 
   async findOne(id: string): Promise<Genre> {
-    return this.findById(id)
+    return this.findById(id);
   }
-
-  handleError(error: Error) {
-    console.log(error.message);
-    throw new UnprocessableEntityException(error.message);
-    return undefined
-;  }
 
   create(dto: CreateGenreDto): Promise<Genre> {
     const data: Genre = { ...dto };
 
-    return this.prisma.genre.create({ data }).catch(this.handleError);
+    return this.prisma.genre.create({ data }).catch(handleError);
   }
 
   async update(id: string, dto: UpdateGenreDto): Promise<Genre> {
-    await this.findById(id
-    )
+    await this.findById(id);
+
     const data: Partial<Genre> = { ...dto };
 
-    return this.prisma.genre.update({
-      where: { id },
-      data,
-    });
+    return this.prisma.genre
+      .update({
+        where: { id },
+        data,
+      })
+      .catch(handleError);
   }
+
   async delete(id: string) {
+    await this.findById(id);
+
     await this.prisma.genre.delete({ where: { id } });
   }
 }
