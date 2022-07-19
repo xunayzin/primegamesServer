@@ -18,6 +18,8 @@ model Games {
 
   genre Genre[]
   @@map("games")
+  Profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId String?
 }
 
 model Genre {
@@ -41,6 +43,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  profile Profile[]
   @@map("user")
 }
 
@@ -48,7 +51,11 @@ model Profile {
   id        String   @id @default(uuid())
   title     String   @unique
   imageURL  String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  games     Games[]
+
   @@map("profile")
 }
