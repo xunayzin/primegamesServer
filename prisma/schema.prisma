@@ -8,12 +8,12 @@ datasource db {
 }
 
 model Games {
-  id          String   @id @default(uuid())
-  title       String   @unique
-  description String   @unique
-  year        Int
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id            String          @id @default(uuid())
+  title         String          @unique
+  description   String          @unique
+  year          Int
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
   genre         Genre[]
   profile       Profile[]
   FavoriteGames FavoriteGames[]
@@ -73,16 +73,15 @@ model Favorite {
 model FavoriteGames {
   id String @id @default(uuid())
 
-  games  Games @relation(fields: [gamesId], references: [id])
-gamesId String @map("games_id")
+  games   Games  @relation(fields: [gamesId], references: [id])
+  gamesId String @map("games_id")
 
-  favorite  Favorite @relation(fields: [favoriteId], references: [id])
+  favorite   Favorite @relation(fields: [favoriteId], references: [id])
   favoriteId String   @map("favorite_id")
 
+  Profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId String?
 
-  Profile     Profile? @relation(fields: [profileId], references: [id])
-  profileId   String?
-
-  @@unique([gamesId,favoriteId ])
+  @@unique([gamesId, favoriteId])
   @@map("favorite_to_games")
 }
