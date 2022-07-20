@@ -4,7 +4,7 @@ import { handleError } from 'src/utils/handle-error.util';
 
 @Injectable()
 export class HomepageService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async findById(profileId: string) {
     const profileData = await this.prisma.profile
@@ -15,21 +15,20 @@ export class HomepageService {
         select: {
           title: true,
           imageURL: true,
-          games: {
+          favorites: {
             include: {
               genre: true,
             },
           },
-          favorite: {
-            select: {
-              games: true,
-            },
-          },
+          // favorite: {
+          //   select: {
+          //     games: true,
+          //   },
+          // },
         },
       })
       .catch(handleError);
-    const gameList = profileData.games;
-    const favorite = profileData.favorite;
+    const gameList = profileData.favorites;
     const gameOrdered = [];
     const allGenres = await this.prisma.genre.findMany();
     allGenres.map((genre) => {
@@ -48,8 +47,7 @@ export class HomepageService {
       }
     });
     return {
-      games: gameOrdered,
-      favorite: favorite,
-    };
+      favorites: gameOrdered,
+    }
   }
 }

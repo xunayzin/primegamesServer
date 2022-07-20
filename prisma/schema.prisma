@@ -8,15 +8,14 @@ datasource db {
 }
 
 model Games {
-  id            String          @id @default(uuid())
-  title         String          @unique
-  description   String          @unique
-  year          Int
-  createdAt     DateTime        @default(now()) @map("created_at")
-  updatedAt     DateTime        @updatedAt @map("updated_at")
-  genre         Genre[]
-  profile       Profile[]
-  FavoriteGames FavoriteGames[]
+  id          String    @id @default(uuid())
+  title       String    @unique
+  description String    @unique
+  year        Int
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  genre       Genre[]
+  profile     Profile[]
 
   @@map("games")
 }
@@ -37,6 +36,7 @@ model User {
   email     String    @unique
   password  String
   image     String
+  nickname  String    @unique
   isAdmin   Boolean   @default(false) @map("is_admin")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -46,42 +46,15 @@ model User {
 }
 
 model Profile {
-  id         String          @id @default(uuid())
-  title      String          @unique
-  imageURL   String
-  user       User            @relation(fields: [userId], references: [id])
-  userId     String          @map("user_id")
-  createdAt  DateTime        @default(now()) @map("created_at")
-  updatedAt  DateTime        @updatedAt @map("updated_at")
-  favorite   FavoriteGames[]
-  games      Games[]
-  favoriteId String?
-
-  @@map("profile")
-}
-
-model Favorite {
   id        String   @id @default(uuid())
+  title     String   @unique
+  imageURL  String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  games FavoriteGames[]
+  favorites Games[]
 
-  @@map("favorite")
-}
-
-model FavoriteGames {
-  id String @id @default(uuid())
-
-  games   Games  @relation(fields: [gamesId], references: [id])
-  gamesId String @map("games_id")
-
-  favorite   Favorite @relation(fields: [favoriteId], references: [id])
-  favoriteId String   @map("favorite_id")
-
-  Profile   Profile? @relation(fields: [profileId], references: [id])
-  profileId String?
-
-  @@unique([gamesId, favoriteId])
-  @@map("favorite_to_games")
+  @@map("profile")
 }

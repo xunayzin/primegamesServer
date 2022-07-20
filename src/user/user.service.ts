@@ -18,6 +18,7 @@ export class UserService {
     name: true,
     password: false,
     image: true,
+    email: true,
     createdAt: true,
     updatedAt: true,
   };
@@ -57,6 +58,7 @@ export class UserService {
     const data: User = {
       ...dto,
       password: await bcrypt.hash(dto.password, 10),
+      email: ''
     };
 
     return this.prisma.user

@@ -15,7 +15,7 @@ export class ProfileService {
     return this.prisma.profile.findMany({
       include: {
         user: true,
-        games: true,
+        favorites: true,
       },
     });
   }
@@ -23,7 +23,7 @@ export class ProfileService {
     const record = await this.prisma.profile.findUnique({
       where: { id },
       include: {
-        games: true,
+        favorites: true,
       },
     });
     if (!record) {
@@ -42,7 +42,7 @@ export class ProfileService {
         imageURL: dto.imageURL,
         user: { connect: { id: userId } },
       },
-      include: { games: true },
+      include: { favorites: true },
     });
   }
 
@@ -53,7 +53,7 @@ export class ProfileService {
         where: { id },
         data: dto,
         include: {
-          games: true,
+          favorites: true,
         },
       })
       .catch(this.handleError);
