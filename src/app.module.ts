@@ -7,6 +7,8 @@ import { GenreModule } from './genre/genre.module';
 import { UserModule } from './user/user.module';
 import { ProfileModule } from './profile/profile.module';
 import { AuthModule } from './auth/auth.module';
+import { FavoriteModule } from './favorite/favorite.module';
+import { HomepageModule } from './homepage/homepage.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     ProfileModule,
     AuthModule,
+    FavoriteModule,
+    HomepageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
